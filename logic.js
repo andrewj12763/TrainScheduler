@@ -32,14 +32,17 @@ $("#btn").on('click', function() {
 });
 
 
-
 database.ref().on("child_added", function (childSnapshot) {
 	console.log('childSnap: ', childSnapshot.val());
 	var val = childSnapshot.val();
-	$("#employeeInfo").append("<tr><td class='trainName'>" + val.trainName + "</td><td class='destination'>" + val.destination + "</td>" + "</td><td class='frequency'>" + val.frequency + "</td>" + "<td class='nextArrival'>" + val.nextArrival + "</td><td class='minAway'>" + Math.abs(val.currentTime.dif()) + "</td></tr>");
+
+	function getTimeInterval(currentTime, val.nextArrival){
+		return moment(moment(currentTime,"hh:mm").diff(moment(val.nextArrival,"hh:mm"))).format("hh:mm"); 
+	}
+	$("#employeeInfo").append("<tr><td class='trainName'>" + val.trainName + "</td><td class='destination'>" + val.destination + "</td>" + "</td><td class='frequency'>" + val.frequency + "</td>" + "<td class='nextArrival'>" + val.nextArrival + "</td><td class='minAway'>" + getTimeInterval() + "</td></tr>");
 });
 
 var currentTime = moment();
 // var nextArrivalTime = (nextArrival
-var nextTrain = currentTime.add(frequency, 'minutes').format('HH:mm');
-console.log("arrival time", nextTrain);
+// var nextTrain = currentTime.add(frequency, 'minutes').format('HH:mm');
+// console.log("arrival time", nextTrain);
