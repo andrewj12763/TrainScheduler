@@ -11,13 +11,12 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
-$("#btn").on('click', function() {
+$("#btn").on('click', function () {
 	event.preventDefault();
 	var trainName = $("#trainName").val();
 	var destination = $("#destination").val();
 	var frequency = $("#frequency").val();
 	var nextArrival = $("#nextArrival").val();;
-	console.log("variable output", name);
 	database.ref().push({
 		trainName: trainName,
 		destination: destination,
@@ -27,22 +26,19 @@ $("#btn").on('click', function() {
 
 	});
 
-	console.log(name);
 
 });
 
 
 database.ref().on("child_added", function (childSnapshot) {
-	console.log('childSnap: ', childSnapshot.val());
 	var val = childSnapshot.val();
-
-	function getTimeInterval(currentTime, val.nextArrival){
-		return moment(moment(currentTime,"hh:mm").diff(moment(val.nextArrival,"hh:mm"))).format("hh:mm"); 
+	function getTimeInterval() {
+		var arrival = val.nextArrival;
+		var arrivalTimeStamp = moment().format("YYYY-MM-DD") + " " + arrival
+		var minutesAway = Math.abs(moment(arrivalTimeStamp).diff(moment(currentTime), "minutes"));
+		return minutesAway
 	}
 	$("#employeeInfo").append("<tr><td class='trainName'>" + val.trainName + "</td><td class='destination'>" + val.destination + "</td>" + "</td><td class='frequency'>" + val.frequency + "</td>" + "<td class='nextArrival'>" + val.nextArrival + "</td><td class='minAway'>" + getTimeInterval() + "</td></tr>");
 });
 
-var currentTime = moment();
-// var nextArrivalTime = (nextArrival
-// var nextTrain = currentTime.add(frequency, 'minutes').format('HH:mm');
-// console.log("arrival time", nextTrain);
+var currentTime = moment().format("YYYY-MM-DD HH:mm");
